@@ -23,9 +23,7 @@ export default function List(props) {  // функция отрисовки вс
             </div>
         )
     }   
-    
-   
-       
+           
     return (
         <div className="tasks__list" id="tasks__list">
             {itemsObj.map((itemOfList) => ListItem(itemOfList))}

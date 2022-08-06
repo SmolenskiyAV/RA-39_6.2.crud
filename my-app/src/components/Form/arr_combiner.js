@@ -8,10 +8,9 @@ export function isArray(value) {   // проверка переменной ка
     return Object.prototype.toString.call(value) === '[object Array]';
   };
 
-
 export default async function postRequest(dateValue, noteValue) { // POST-запрос на сервер + GET-ответ с сервера (для передачи в компонент <List>)
 
-    const updatedItemArray = {/*id: nanoid(), */date: dateValue, note: noteValue }; // формируем из входящего параметра новый/обновлённый элемент списка
+    const updatedItemArray = { date: dateValue, note: noteValue }; // формируем из входящего параметра новый/обновлённый элемент списка
 
     await fetch(`${url}/notes`, {    // отправка новой заметки на сервер
         method: 'POST',
@@ -33,8 +32,8 @@ export default async function postRequest(dateValue, noteValue) { // POST-зап
         return listArray;
         
     } else {
-        alert("Ошибка HTTP: " + response.status);
-    }
+        throw new Error("Ошибка HTTP: " + response.status);
+    };
 };
 
 export async function getRequest() { // GET-ответ с сервера (для передачи в компонент <List>)
@@ -50,6 +49,6 @@ export async function getRequest() { // GET-ответ с сервера (для
         return listArray;
         
     } else {
-        alert("Ошибка HTTP: " + response.status);
-    }
-}
+        throw new Error("Ошибка HTTP: " + response.status);
+    };
+};

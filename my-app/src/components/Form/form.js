@@ -1,10 +1,10 @@
 /* eslint-disable no-unused-expressions */
 
 import React from "react";
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import "./form.css";
 import List from "./List";
-import postRequest, { getRequest, isArray, url } from "./arr_combiner";
+import postRequest, { getRequest, url } from "./arr_combiner";
 // import PropTypes from "prop-types";
 // import UserModel from "../models/UserModel";
 
@@ -20,22 +20,11 @@ export default function Form() {  // КОМПОНЕНТ Формы
   });
 
   const [itemsObj, setItemsObj] = useState([]); // массив объектов, передаваемыех в компонент <List />
-  const [updated, setUpdated] = useState();
-
+  
   document.addEventListener("DOMContentLoaded", () => {
     document.querySelector('input').focus();
   });
   
-  useEffect(() => { // ОТПРАВКА ДАННЫХ НА СЕРВЕР и ПОЛУЧЕНИЕ ОТВЕТА от сервера 
-    async () => {
-      const result = await postRequest();
-      console.log('data has resived!', result); // КОНТРОЛЬНАЯ ТОЧКА
-      console.log('result is Arr = ',isArray(result));  // КОНТРОЛЬНАЯ ТОЧКА
-
-      setItemsObj(prevItemsObj => result);
-    }
-  }, [updated]);
-
   const handleDateChange = evt => { // функция обработки набора символов внутри input-а "ДАТА"
     
     setForm(prevForm => ({...prevForm, date_input: evt.target.value}));
@@ -50,44 +39,23 @@ export default function Form() {  // КОМПОНЕНТ Формы
       
       setForm(prevForm => ({...prevForm, date_input: evt.target.value}));
       dateValue = evt.target.value;
-    }
-  }
+    };
+  };
 
   const handleDistanceChange = evt => { // функция обработки набора символов внутри input-а "ЗАМЕТКИ"
 
     setForm(prevForm => ({...prevForm, note_input: evt.target.value}));
     noteValue = evt.target.value;
-  }
+  };
   
   const handleSubmit = async evt => { // обработка нажатия "Enter"
     evt.preventDefault();
     if ((dateValue !== '') && (noteValue !== '')) { // если все поля "input" корректно заполнены
       
-      tempArr = /*{date: dateValue, note: noteValue }*/await postRequest(dateValue, noteValue);
+      tempArr = await postRequest(dateValue, noteValue);
       console.log('tempArr = ', tempArr);  // КОНТРОЛЬНАЯ ТОЧКА
       setItemsObj(prevItemsObj => tempArr);
       
-      setUpdated(new Date().getTime());
-      console.log('updated is ', updated);  // КОНТРОЛЬНАЯ ТОЧКА
-
-      dateValue = '';
-      noteValue = '';
-      setForm(prevForm => ({...prevForm, note_input: '', date_input: ''}));
-      document.querySelector('input').focus();
-    };
-  };
-
-  const handleClick = async () => { // ОБРАБОТКА НАЖАТИЯ КНОПКИ "добавить"
-    
-    if ((dateValue !== '') && (noteValue !== '')) { // если все поля "input" корректно заполнены
-      
-        tempArr = /*{date: dateValue, note: noteValue };*/await postRequest(dateValue, noteValue);
-        console.log('tempArr = ', tempArr);  // КОНТРОЛЬНАЯ ТОЧКА
-        setItemsObj(prevItemsObj => tempArr);
-
-        setUpdated(new Date().getTime()); 
-        console.log('updated is ', updated);  // КОНТРОЛЬНАЯ ТОЧКА
-         
       dateValue = '';
       noteValue = '';
       setForm(prevForm => ({...prevForm, note_input: '', date_input: ''}));
@@ -131,7 +99,7 @@ export default function Form() {  // КОМПОНЕНТ Формы
                   className="tasks__input" 
                   name="date_input" 
                   id="date__input" 
-                  placeholder="Введите датау"
+                  placeholder="Введите дату"
                   value={form.date_input}
                   onChange={handleDateChange} />
               </label>
@@ -144,7 +112,7 @@ export default function Form() {  // КОМПОНЕНТ Формы
                   value={form.note_input}
                   onChange={handleDistanceChange} />
               </label>
-              <button className="tasks__add" onClick={handleClick} id="tasks__add">Добавить</button>
+              <button className="tasks__add" id="tasks__add">Добавить</button>
             </form>
             <List itemsObj={itemsObj} onRemove={handleRemove}/>
           </div>
