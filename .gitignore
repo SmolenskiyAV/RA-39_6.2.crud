@@ -4,8 +4,6 @@
 my-app/node_modules
 my-app/.pnp
 .pnp.js
-css
-data
 backend/node_modules
 backend/.rest
 
